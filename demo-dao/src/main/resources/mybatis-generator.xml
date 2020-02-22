@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <classPathEntry location="C:\Users\12749\.m2\repository\mysql\mysql-connector-java\5.1.38\mysql-connector-java-5.1.38.jar"/>
+
+    <context id="project">
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://123.57.133.58:3318/project?useUnicode=true&amp;characterEncoding=utf-8&amp;allowMultiQueries=true"
+                        userId="aliyun"
+                        password="Wq970424++"/>
+        <!--实体类-->
+        <javaModelGenerator targetPackage="com.dao.entity" targetProject="MAVEN"/>
+        <!--mapper映射文件-->
+        <sqlMapGenerator targetPackage="com.dao.mapper" targetProject="MAVEN"/>
+        <!--dao接口文件-->
+        <javaClientGenerator targetPackage="com.dao.mapper" targetProject="MAVEN"
+                             type="XMLMAPPER"/>
+
+        <table mapperName="BaseDetailRepository" tableName="BASE_DETAIL" domainObjectName="BaseDetail">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+            <!--如果数据库字段类型为文本或长文本，则需要使用这行代码，为避免生成两个实体类java文件的情况发生 !-->
+            <!--<columnOverride column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+            <!--<columnOverride column="config_standard" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+        </table>
+    </context>
+
+
+</generatorConfiguration>
