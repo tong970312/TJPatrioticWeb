@@ -2,17 +2,9 @@ package com.example.demo.dto;
 
 import lombok.Data;
 
-/**
- * 基地详情请求dto
- */
 @Data
-public class BaseDetailReqDTO {
-
+public class BaseDetailRepDTO {
     private String id;
-    /**
-     * 所属市区id
-     */
-    private String parentId;
     /**
      * 基地名称
      */
@@ -53,5 +45,4 @@ public class BaseDetailReqDTO {
      * 公共交通
      */
     private String publicTransportation;
-
 }

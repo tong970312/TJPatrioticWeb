@@ -488,4 +488,23 @@
       USER_ROLES_IN_SYS = #{userRolesInSys,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=VARCHAR}
   </update>
+  <select id="checkUser" parameterType="string" resultMap="BaseResultMap">
+    select *
+    from USER_INFO
+    where USER_NAME = #{username} and PASSWORD = #{password}
+  </select>
+  <!--注册校验-->
+  <select id="checkName" resultType="java.lang.String">
+      select USER_NAME
+      from USER_INFO
+      where USER_NAME = #{userName}
+    </select>
+  <select id="getUserNoCode" resultType="java.lang.String">
+    select USER_NO
+      from USER_INFO
+      where USER_NO like CONCAT(#{code},'%')
+      order by SUBSTR(USER_NO,5) desc
+      limit 1
+  </select>
+
 </mapper>

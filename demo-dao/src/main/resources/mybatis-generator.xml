@@ -20,8 +20,7 @@
         <table mapperName="BaseDetailRepository" tableName="BASE_DETAIL" domainObjectName="BaseDetail">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
             <!--如果数据库字段类型为文本或长文本，则需要使用这行代码，为避免生成两个实体类java文件的情况发生 !-->
-            <!--<columnOverride column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />-->
-            <!--<columnOverride column="config_standard" javaType="java.lang.String" jdbcType="VARCHAR" />-->
+            <columnOverride column="BASE_INTRODUCTION" javaType="java.lang.String" jdbcType="VARCHAR" />
         </table>
     </context>
 
