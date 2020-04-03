@@ -94,7 +94,7 @@ public class RedisUtil {
     public boolean set(String key,Object value) {
         try {
             redisTemplate.opsForValue().set(key, value);
-            this.expire(key,1800);
+            this.expire(key,3600);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

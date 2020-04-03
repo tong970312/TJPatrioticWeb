@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.RedisSystemException;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -32,9 +33,9 @@ public class LoginFilter implements Filter {
     //直接放行的请求
     public final static List<String> chainListUrls =
             new ArrayList<String>(Arrays.asList("/admin/login",
-                                                "/admin/register",
-                                                "/admin/checkAccount",
-                                                "/admin/sendValidCode"));
+                                            "/admin/register",
+                                            "/admin/checkAccount",
+                                            "/admin/sendValidCode"));
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
@@ -50,10 +51,16 @@ public class LoginFilter implements Filter {
             filterChain.doFilter(servletRequest,servletResponse);
             return;
         }
-        String userJson = String.valueOf(redisUtil.get(paramNo));
+        String userJson = "";
+        try {
+            userJson = String.valueOf(redisUtil.get(paramNo));
+        } catch (RedisSystemException e) {
+            e.printStackTrace();
+            throw new ServiceException("Redis访问超时,请重新操作");
+        }
         //如果当前登录信息不存在
-        if (StringUtils.equals("null",userJson)) {
-            throw new ServiceException("登录失效,请重新登陆");
+        if (StringUtils.isBlank(userJson) || StringUtils.equals("null",userJson)) {
+            throw new ServiceException("登录失效,请重新登录");
         }
         //有操作的，更新过期时间
         redisUtil.expire(paramNo,USER_SESSION_EXPIRE);

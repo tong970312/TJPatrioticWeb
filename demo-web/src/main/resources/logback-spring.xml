@@ -25,5 +25,5 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="TIME_FILE"/>
     </root>
-    <!--<logger name="com.example.demo.dao" level="DEBUG" />-->
+<!--    <logger name="com.example.demo.dao" level="info" />-->
 </configuration>

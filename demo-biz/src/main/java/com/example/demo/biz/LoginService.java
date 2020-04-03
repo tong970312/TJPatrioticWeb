@@ -1,7 +1,7 @@
 package com.example.demo.biz;
 
 import com.common.ResultMessage;
-import com.example.demo.dao.entity.UserRegisterVO;
+import com.example.demo.dto.UserRegisterVO;
 import com.example.demo.dto.LoginInfoReqDTO;
 
 public interface LoginService {

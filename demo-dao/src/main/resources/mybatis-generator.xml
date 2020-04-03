@@ -10,17 +10,17 @@
                         userId="aliyun"
                         password="Wq970424++"/>
         <!--实体类-->
-        <javaModelGenerator targetPackage="com.dao.entity" targetProject="MAVEN"/>
+        <javaModelGenerator targetPackage="com.example.demo.dao.entity" targetProject="MAVEN"/>
         <!--mapper映射文件-->
         <sqlMapGenerator targetPackage="com.dao.mapper" targetProject="MAVEN"/>
         <!--dao接口文件-->
-        <javaClientGenerator targetPackage="com.dao.mapper" targetProject="MAVEN"
+        <javaClientGenerator targetPackage="com.example.demo.dao.repository" targetProject="MAVEN"
                              type="XMLMAPPER"/>
 
-        <table mapperName="BaseDetailRepository" tableName="BASE_DETAIL" domainObjectName="BaseDetail">
+        <table mapperName="BaseNewsRepository" tableName="BASE_NEWS" domainObjectName="BaseNews">
             <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
             <!--如果数据库字段类型为文本或长文本，则需要使用这行代码，为避免生成两个实体类java文件的情况发生 !-->
-            <columnOverride column="BASE_INTRODUCTION" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <columnOverride column="CONTENT" javaType="java.lang.String" jdbcType="VARCHAR" />
         </table>
     </context>
 

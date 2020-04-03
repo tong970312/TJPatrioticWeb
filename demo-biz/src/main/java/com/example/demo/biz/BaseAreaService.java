@@ -1,7 +1,9 @@
 package com.example.demo.biz;
 
 import com.common.ResultMessage;
+import com.example.demo.dto.BaseListReqVO;
 import com.example.demo.dto.BaseDetailReqDTO;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface BaseAreaService {
     /**
@@ -18,10 +20,10 @@ public interface BaseAreaService {
     ResultMessage getBaseDetails(Integer baseId);
     /**
      * 获取市内基地列表
-     * @param parentId
+     * @param baseListReqVO
      * @return
      */
-    ResultMessage getBaseList(Integer parentId);
+    ResultMessage getBaseList(BaseListReqVO baseListReqVO);
 
     /**
      * 修改基地内容
@@ -29,4 +31,6 @@ public interface BaseAreaService {
      * @return
      */
     ResultMessage modifyBase(BaseDetailReqDTO baseDetailReqDTO);
+
+    ResultMessage upload(MultipartFile file);
 }

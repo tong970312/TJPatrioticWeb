@@ -3,7 +3,7 @@ package com.example.demo.web.controller;
 import com.common.ResultMessage;
 import com.controller.BaseController;
 import com.example.demo.biz.LoginService;
-import com.example.demo.dao.entity.UserRegisterVO;
+import com.example.demo.dto.UserRegisterVO;
 import com.example.demo.dto.LoginInfoReqDTO;
 import com.util.MailUtil;
 import com.util.RedisUtil;

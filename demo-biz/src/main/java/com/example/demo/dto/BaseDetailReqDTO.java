@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class BaseDetailReqDTO {
 
-    private String id;
+    private Integer id;
     /**
      * 所属市区id
      */

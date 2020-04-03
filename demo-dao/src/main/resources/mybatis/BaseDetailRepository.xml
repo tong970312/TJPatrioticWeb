@@ -124,6 +124,14 @@
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--
@@ -521,11 +529,14 @@
     where ID = #{id,jdbcType=INTEGER}
   </update>
   <select id="checkBaseDetail" parameterType="string" resultMap="BaseResultMap">
-    select ID, PARENT_ID, BASE_NAME, BASE_INTRODUCTION, BASE_PRI_URL, BASE_LOCATION, TEL_NO,
-    ZIP_CODE, FIX_CODE, WEBSITE, OPEN_TIME, PUBLIC_TRANSPORTATION, OTHER_INFO1, OTHER_INFO2,
-    OTHER_INFO3, CREATE_DATE, CREATE_UID, UPDATE_DATE, UPDATE_UID, DEL_FLAG
+    select BASE_NAME
     from BASE_DETAIL
     where BASE_NAME = #{baseName}
+  </select>
+  <select id="checkBaseDetail2" resultType="java.lang.String">
+    select BASE_NAME
+    from BASE_DETAIL
+    where BASE_NAME =#{baseName} and ID != #{id}
   </select>
 
 </mapper>

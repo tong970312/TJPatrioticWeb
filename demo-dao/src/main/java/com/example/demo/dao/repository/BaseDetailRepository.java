@@ -95,5 +95,7 @@ public interface BaseDetailRepository {
     int updateByPrimaryKey(BaseDetail record);
 
 
-    BaseDetail checkBaseDetail(String baseName);
+    String checkBaseDetail(String baseName);
+
+    String checkBaseDetail2(@Param("baseName") String baseName,@Param("id") Integer id);
 }
