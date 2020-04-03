@@ -1,0 +1,50 @@
+#设置启动端口
+server:
+  port: 8318
+#数据源配置
+spring:
+  datasource:
+    password: Wq970424++
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://123.57.133.58:3318/project?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: aliyun
+    hikari:
+      max-lifetime: 30000
+      minimum-idle: 3
+      connection-test-query: SELECT 1
+      maximum-pool-size: 10
+#redis配置
+  redis:
+    password: Wq970424++
+    database: 0
+    port: 7424
+    host: 123.57.133.58
+    lettuce:
+      pool:
+        max-idle: 10
+        min-idle: 5
+        max-active: 10
+        max-wait: 10000ms
+#访问服务器图片的url
+image:
+  url: http://123.57.133.58/images/
+
+#设置更新时间
+USER_SESSION_EXPIRE: 1800
+#日志配置
+logging:
+  file:
+    name: ./logs/demo
+  level:
+    com:
+      example:
+        demo:
+          dao: debug
+#服务器存放图片的位置
+local:
+  url: /usr/local/image
+#发送邮箱验证码,发送者配置
+email:
+  emailSMTPHost: smtp.qq.com
+  sendEmailAccount: 1274961697@qq.com
+  sendEmailPrivateCode: jrifnmhmplgmhgej

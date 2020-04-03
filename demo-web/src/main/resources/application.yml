@@ -1,0 +1,10 @@
+#使用对应配置文件
+spring:
+  profiles:
+    active: dev
+
+#当前mapper映射文件所在位置
+#mapper.xml文件中resultMap的type或者parameterType会使用自定义的实体类，设置其所在包
+mybatis:
+  mapper-locations: classpath:mybatis/*.xml
+  type-aliases-package: com.example.demo.dao.entity
