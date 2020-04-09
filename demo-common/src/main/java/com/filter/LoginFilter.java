@@ -33,6 +33,7 @@ public class LoginFilter implements Filter {
     //直接放行的请求
     public final static List<String> chainListUrls =
             new ArrayList<String>(Arrays.asList("/admin/login",
+                                            "/baseNews/test",
                                             "/admin/register",
                                             "/admin/checkAccount",
                                             "/admin/sendValidCode"));

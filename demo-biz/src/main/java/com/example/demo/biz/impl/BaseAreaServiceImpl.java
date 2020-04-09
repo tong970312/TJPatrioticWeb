@@ -10,7 +10,6 @@ import com.example.demo.dto.PageModelReq;
 import com.example.demo.dao.repository.BaseDetailRepository;
 import com.example.demo.dto.BaseDetailReqDTO;
 import com.util.BeanMapperUtils;
-import com.util.FTPUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +32,7 @@ public class BaseAreaServiceImpl implements BaseAreaService {
     protected static final Logger logger = LoggerFactory.getLogger(BaseAreaServiceImpl.class);
     @Autowired
     BaseDetailRepository baseDetailRepository;
-    @Autowired
-    FTPUtils ftpUtils;
+
     @Value("${image.url}")
     String imageUrl;
     @Value("${local.url}")

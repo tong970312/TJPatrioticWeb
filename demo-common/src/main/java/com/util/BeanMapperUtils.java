@@ -18,10 +18,6 @@ public class BeanMapperUtils {
         return MAPPER.map(source, destinationClass);
     }
 
-    public static void map(Object source, Object destination) {
-        MAPPER.map(source, destination);
-    }
-
     public static <T> List<T> mapList(Collection sourceList, Class<T> destinationClass) {
         List<T> destinationList = new ArrayList<>();
         for (Object sourceObject : sourceList) {

@@ -7,9 +7,7 @@ import com.example.demo.dao.entity.BaseNews;
 import com.example.demo.dao.entity.BaseNewsExample;
 import com.example.demo.dao.entity.UserInfo;
 import com.example.demo.dao.repository.BaseNewsRepository;
-import com.example.demo.dto.BaseNewsReqDTO;
-import com.example.demo.dto.BaseNewsResVO;
-import com.example.demo.dto.PageModelReq;
+import com.example.demo.dto.*;
 import com.util.BeanMapperUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -165,5 +164,16 @@ public class BaseNewsServiceImpl implements BaseNewsService {
             return Result.error("删除失败");
         }
         return  Result.success("删除成功");
+    }
+
+    @Override
+    public ResultMessage test() {
+        //初始化
+        RestTemplate restTemplate = new RestTemplate();
+        LoginInfoReqDTO loginInfoReqDTO = new LoginInfoReqDTO();
+        loginInfoReqDTO.setPassword("123456");
+        loginInfoReqDTO.setUserName("李通");
+        RestTemplateTestVo restTemplateTestVo =restTemplate.postForObject("http://123.57.133.58:8318/admin/login",loginInfoReqDTO,RestTemplateTestVo.class);
+        return Result.success(restTemplateTestVo);
     }
 }

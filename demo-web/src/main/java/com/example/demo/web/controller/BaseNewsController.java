@@ -47,5 +47,10 @@ public class BaseNewsController {
       return baseNewsService.delNews(id);
     }
 
+    @GetMapping(value = "/test")
+    public ResultMessage test(){
+      return baseNewsService.test();
+    }
+
 
 }

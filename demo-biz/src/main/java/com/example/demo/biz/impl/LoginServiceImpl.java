@@ -121,6 +121,8 @@ public class LoginServiceImpl implements LoginService {
         if (insert <= 0) {
             return Result.error("注册失败");
         }
+        //注册成功，删除当前验证码
+        redisUtil.del(userRegisterVO.getEmail());
         return Result.success("注册成功");
     }
 
@@ -158,7 +160,8 @@ public class LoginServiceImpl implements LoginService {
         logger.info("验证码"+validCode);
         //存入redis
         try {
-            redisUtil.set(email,validCode,600);
+            //设置存放时间为300秒
+            redisUtil.set(email,validCode,300);
         } catch (Exception e) {
             throw new  ServiceException("验证码存入redis失败");
         }
