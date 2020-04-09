@@ -47,10 +47,10 @@ public class BaseNewsController {
       return baseNewsService.delNews(id);
     }
 
-//    @GetMapping(value = "/test")
-//    public ResultMessage test(){
-//      return baseNewsService.test();
-//    }
+    @GetMapping(value = "/test")
+    public ResultMessage test(){
+      return Result.success("测试jenkins");
+    }
 
 
 }
