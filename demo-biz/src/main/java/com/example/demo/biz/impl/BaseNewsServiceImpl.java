@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -166,14 +165,14 @@ public class BaseNewsServiceImpl implements BaseNewsService {
         return  Result.success("删除成功");
     }
 
-    @Override
-    public ResultMessage test() {
-        //初始化
-        RestTemplate restTemplate = new RestTemplate();
-        LoginInfoReqDTO loginInfoReqDTO = new LoginInfoReqDTO();
-        loginInfoReqDTO.setPassword("123456");
-        loginInfoReqDTO.setUserName("李通");
-        RestTemplateTestVo restTemplateTestVo =restTemplate.postForObject("http://123.57.133.58:8318/admin/login",loginInfoReqDTO,RestTemplateTestVo.class);
-        return Result.success(restTemplateTestVo);
-    }
+//    @Override
+//    public ResultMessage test() {
+//        //初始化
+//        RestTemplate restTemplate = new RestTemplate();
+//        LoginInfoReqDTO loginInfoReqDTO = new LoginInfoReqDTO();
+//        loginInfoReqDTO.setPassword("123456");
+//        loginInfoReqDTO.setUserName("李通");
+//        RestTemplateTestVo restTemplateTestVo =restTemplate.postForObject("http://123.57.133.58:8318/admin/login",loginInfoReqDTO,RestTemplateTestVo.class);
+//        return Result.success(restTemplateTestVo);
+//    }
 }

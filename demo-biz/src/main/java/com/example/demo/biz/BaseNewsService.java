@@ -36,5 +36,5 @@ public interface BaseNewsService {
      */
     ResultMessage delNews(String id);
 
-    ResultMessage test();
+//    ResultMessage test();
 }
