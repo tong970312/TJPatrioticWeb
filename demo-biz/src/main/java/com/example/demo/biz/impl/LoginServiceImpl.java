@@ -19,10 +19,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class LoginServiceImpl implements LoginService {
@@ -123,6 +123,15 @@ public class LoginServiceImpl implements LoginService {
         }
         //注册成功，删除当前验证码
         redisUtil.del(userRegisterVO.getEmail());
+        //将用户信息存到redis
+        List<UserInfo> allUser = userInfoRepository.selectByExample(null);
+        if (!CollectionUtils.isEmpty(allUser)) {
+            Map<String,UserInfo> userInfoMap = new HashMap<>();
+            for (UserInfo users : allUser) {
+                userInfoMap.put(users.getUserNo(),users);
+            }
+            redisUtil.set2("userInfos",userInfoMap);
+        }
         return Result.success("注册成功");
     }
 

@@ -101,6 +101,16 @@ public class RedisUtil {
             return false;
         }
     }
+    public boolean set2(String key,Object value) {
+        try {
+            redisTemplate.opsForValue().set(key, value);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     /**
      * 普通缓存放入并设置时间
@@ -116,6 +126,15 @@ public class RedisUtil {
             }else{
                 set(key, value);
             }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean setAllTime(String key,Object value){
+        try {
+                set(key, value);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
