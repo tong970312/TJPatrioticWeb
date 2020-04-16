@@ -44,8 +44,6 @@ public class LeaveMsgResVO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
-    /**
-     * 子留言
-     */
-    private LeaveMsgResVO child;
+
+    private String cityCode;
 }

@@ -15,7 +15,7 @@ public class UserInfoUtil {
     @Autowired
     RedisUtil redisUtil;
 
-   public UserInfo getUserInfoByNo(String userNo){
+   public  UserInfo getUserInfoByNo(String userNo){
        if (StringUtils.isEmpty(userNo)) {
            throw  new ServiceException("获取用户信息失败，参数错误");
        }

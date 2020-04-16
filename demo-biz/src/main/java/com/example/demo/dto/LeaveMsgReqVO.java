@@ -15,6 +15,7 @@ public class LeaveMsgReqVO {
                 ", wordMasterId='" + wordMasterId + '\'' +
                 ", msgContent='" + msgContent + '\'' +
                 ", msgLevel=" + msgLevel +
+                ", cityCode='" + cityCode + '\'' +
                 '}';
     }
 
@@ -39,4 +40,8 @@ public class LeaveMsgReqVO {
      * 留言层级
      */
     private Integer msgLevel;
+    /**
+     * 城市区县编码
+     */
+    private String cityCode;
 }

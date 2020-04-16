@@ -1,26 +1,27 @@
 package com.example.demo.biz.impl;
 
-import com.example.demo.dto.PageParam;
+import com.example.demo.dao.entity.LeaveMessageExample;
+import com.example.demo.dto.*;
 import com.common.Result;
 import com.common.ResultMessage;
 import com.example.demo.biz.LeaveMsgService;
 import com.example.demo.dao.entity.LeaveMessage;
 import com.example.demo.dao.entity.UserInfo;
 import com.example.demo.dao.repository.LeaveMessageRepository;
-import com.example.demo.dto.LeaveMsgPageVo;
-import com.example.demo.dto.LeaveMsgReqVO;
-import com.example.demo.dto.LeaveMsgResVO;
 import com.exception.ServiceException;
 import com.util.BeanMapperUtils;
+import com.util.JsonUtil;
+import com.util.UserInfoUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class LeaveMsgServiceImpl implements LeaveMsgService {
@@ -30,6 +31,8 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
     protected static final Logger logger = LoggerFactory.getLogger(LeaveMsgServiceImpl.class);
     @Autowired
     LeaveMessageRepository leaveMsgRepository;
+    @Autowired
+    UserInfoUtil userInfoUtil;
     /**
      * 留言
      * @param leaveMsgReqVO
@@ -40,10 +43,8 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
     @Transactional
     public ResultMessage communication(LeaveMsgReqVO leaveMsgReqVO, UserInfo userInfo) {
         //如果parentId为空。当前为第一条留言，此时设置留言目标为管理员
-        if (leaveMsgReqVO.getParentId() == null) {
+        if (StringUtils.isBlank(leaveMsgReqVO.getWordMasterId())) {
             leaveMsgReqVO.setWordMasterId("JYJD202011111");
-        }else if (StringUtils.isBlank(leaveMsgReqVO.getWordMasterId())) {
-            return Result.error("留言目标不能为空");
         }
         if (StringUtils.isBlank(leaveMsgReqVO.getWordAuthorId())) {
             return Result.error("留言作者不能为空");
@@ -51,15 +52,10 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
         if (StringUtils.isBlank(leaveMsgReqVO.getMsgContent())) {
             return Result.error("留言内容不能为空");
         }
-        //当前层级是空,则为第一条,设置为默认值
-        if (leaveMsgReqVO.getMsgLevel() == null) {
-            leaveMsgReqVO.setMsgLevel(1);
-        }else{
-            //当前层级+1
-            leaveMsgReqVO.setMsgLevel(leaveMsgReqVO.getMsgLevel() + 1);
-        }
+
         LeaveMessage leaveMessage = BeanMapperUtils.map(leaveMsgReqVO,LeaveMessage.class);
         leaveMessage.setCreateDate(new Date());
+        leaveMessage.setCreateUid(userInfo.getUserNo());
         Integer result = leaveMsgRepository.insertSelective(leaveMessage);
         if (result <= 0) {
             throw new ServiceException("留言失败");
@@ -74,34 +70,48 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
      */
     @Override
     public ResultMessage getMsg(PageParam<LeaveMsgPageVo> page) {
-        //递归查询留言
-        //初始化响应结果集
-//        List<LeaveMsgResVO> leaveMsgList = new ArrayList<>();
-        page.setStartIndex((page.getPageNum() - 1) * page.getPageSize());
-        System.out.println(page);
-        List<LeaveMessage> leaveMsgList = leaveMsgRepository.selectByPage(page);  //获取团队列表总数
-        int total = leaveMsgRepository.selectCount(page);
-
-        return Result.success(String.valueOf(total),leaveMsgList);
-//        //临时存放父级留言集合
-//        //查找所有第一层留言,parentId为null
-//        List<LeaveMsgResVO> parentMsg = null;
-//        List<LeaveMsgResVO> allMsg = null;
-//        try {
-//            parentMsg = BeanMapperUtils.mapList(leaveMsgRepository.selectAllParent(), LeaveMsgResVO.class);
-//            allMsg = BeanMapperUtils.mapList(leaveMsgRepository.selectByExample(null),LeaveMsgResVO.class);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            throw new ServiceException("对象转换失败");
-//        }
-//        if (parentMsg.isEmpty()) {
-//            return Result.error("当前留言为空");
-//        }
+        PageModelReq pageModelReq = new PageModelReq();
+        if (page.getPageNum() <=0) page.setPageNum(1);
+        if (page.getPageSize()<=0) page.setPageSize(5);
+        page.setPageNum((page.getPageNum() - 1) * page.getPageSize());
+        //临时存放父级留言集合
+        //查找所有第一层留言,parentId为null
+        LeaveMessageExample leaveMessageExample = new LeaveMessageExample();
+        LeaveMessageExample.Criteria criteria =leaveMessageExample.createCriteria();
+        criteria.andParentIdIsNull().andDelFlagEqualTo(0);
+        leaveMessageExample.setLimit(page.getPageSize());
+        leaveMessageExample.setOffset(page.getPageNum());
+        //区县编码不为空
+        if (StringUtils.isNotBlank(page.getData().getCityCode())){
+            criteria.andCityCodeEqualTo(page.getData().getCityCode());
+        }
+        List<LeaveMessage> messageList = leaveMsgRepository.selectByExample(leaveMessageExample);
+        Integer total = leaveMsgRepository.countByExample(leaveMessageExample);
+        //非空限制父节点就可以
+        if (CollectionUtils.isEmpty(messageList)) {
+            return Result.error("当前还没有留言");
+        }
+        List<LeaveMsgResVO> parentMsg = BeanMapperUtils.mapList(messageList, LeaveMsgResVO.class);
+        List<LeaveMsgResVO> allMsg = BeanMapperUtils.mapList(leaveMsgRepository.selectByExample(null),LeaveMsgResVO.class);
 //        //根据所有第一层留言，递归
-//        for (LeaveMsgResVO msg : parentMsg) {
-//               //getChild(msg);
-//            getChild2(msg,allMsg);
-//        }
+        Map<String,LeaveResultVO> resultMap = new HashMap<>();
+        for (LeaveMsgResVO msg : parentMsg) {
+            LeaveResultVO resultVO = new LeaveResultVO();
+            List<LeaveMsgResVO> result = new ArrayList<>();
+            result.add(msg);
+            result.addAll(getChild2(msg,allMsg));
+            for (LeaveMsgResVO leaveMsg:result) {
+                leaveMsg.setWordAuthorName(userInfoUtil.getUserInfoByNo(leaveMsg.getWordAuthorId()).getUserName());
+                leaveMsg.setWordMasterName(userInfoUtil.getUserInfoByNo(leaveMsg.getWordMasterId()).getUserName());
+            }
+            resultVO.setCount(result.size());
+            resultVO.setResult(result);
+           resultMap.put(result.get(0).getCityCode(),resultVO);
+        }
+        pageModelReq.setData(resultMap);
+        pageModelReq.setTotal(Long.valueOf(total));
+        pageModelReq.setPageNum(page.getPageNum());
+        return Result.success(pageModelReq);
     }
 
     //递归子回复方法
@@ -114,12 +124,13 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
 //         msg.setChild(leaveMsgResVO);
 //         getChild(leaveMsgResVO);
 //    }
-//    private void getChild2(LeaveMsgResVO msg,List<LeaveMsgResVO> allMsg){
-//        for (LeaveMsgResVO leaveMsg : allMsg) {
-//            if (leaveMsg.getParentId() == msg.getId()) {
-//                msg.setChild(leaveMsg);
-//                getChild2(leaveMsg,allMsg);
-//            }
-//        }
-//    }
+    private List<LeaveMsgResVO> getChild2(LeaveMsgResVO msg,List<LeaveMsgResVO> allMsg){
+        List<LeaveMsgResVO> list = new ArrayList<>();
+        for (LeaveMsgResVO leaveMsg : allMsg) {
+            if (leaveMsg.getParentId() == msg.getId()) {
+               list.add(leaveMsg);
+            }
+        }
+        return list;
+    }
 }

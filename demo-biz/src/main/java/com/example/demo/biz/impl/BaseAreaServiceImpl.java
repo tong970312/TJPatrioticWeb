@@ -147,6 +147,7 @@ public class BaseAreaServiceImpl implements BaseAreaService {
                 logger.error("对象转换失败");
                 return null;
             }
+            pageModelReq.setPageNum(currentPage);
             pageModelReq.setData(baseDetailReqDTOList);
             pageModelReq.setTotal(count);
             return Result.success("成功",pageModelReq);

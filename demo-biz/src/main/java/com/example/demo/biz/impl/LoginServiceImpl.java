@@ -9,10 +9,7 @@ import com.example.demo.dao.repository.UserInfoRepository;
 import com.example.demo.dto.LoginInfoReqDTO;
 import com.example.demo.dto.LoginInfoResDTO;
 import com.exception.ServiceException;
-import com.util.BeanMapperUtils;
-import com.util.JsonUtil;
-import com.util.MailUtil;
-import com.util.RedisUtil;
+import com.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +28,8 @@ public class LoginServiceImpl implements LoginService {
     UserInfoRepository userInfoRepository;
     @Autowired
     RedisUtil redisUtil;
+    @Autowired
+    UserInfoUtil userInfoUtil;
     @Autowired
     MailUtil mailUtil;
     protected static final Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);

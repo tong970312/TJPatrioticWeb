@@ -6,7 +6,10 @@ import java.util.List;
 
 @Data
 public class PageModelReq <T> {
+
+    private Integer pageNum;
+
     private Long total;
 
-    private List<T> data;
+    private T data;
 }
