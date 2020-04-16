@@ -33,7 +33,7 @@ public class LeaveMsgController extends BaseController {
      * 查看留言 用户、管理员都可
      * @return
      */
-    @GetMapping(value = "/getMsg")
+    @PostMapping(value = "/getMsg")
     public ResultMessage getMsg(@RequestBody PageParam<LeaveMsgPageVo> page){
         return leaveMsgService.getMsg(page);
     }

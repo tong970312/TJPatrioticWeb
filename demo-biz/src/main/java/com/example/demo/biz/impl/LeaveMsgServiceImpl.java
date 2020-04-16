@@ -98,19 +98,19 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
         for (LeaveMsgResVO msg : parentMsg) {
             LeaveResultVO resultVO = new LeaveResultVO();
             List<LeaveMsgResVO> result = new ArrayList<>();
+            List<LeaveMsgResVO> child = getChild2(msg,allMsg);
             result.add(msg);
-            result.addAll(getChild2(msg,allMsg));
+            msg.setList(child);
             for (LeaveMsgResVO leaveMsg:result) {
                 leaveMsg.setWordAuthorName(userInfoUtil.getUserInfoByNo(leaveMsg.getWordAuthorId()).getUserName());
                 leaveMsg.setWordMasterName(userInfoUtil.getUserInfoByNo(leaveMsg.getWordMasterId()).getUserName());
             }
-            resultVO.setCount(result.size());
+            resultVO.setCount(result.size()+child.size());
             resultVO.setResult(result);
            resultMap.put(result.get(0).getCityCode(),resultVO);
         }
         pageModelReq.setData(resultMap);
         pageModelReq.setTotal(Long.valueOf(total));
-        pageModelReq.setPageNum(page.getPageNum());
         return Result.success(pageModelReq);
     }
 

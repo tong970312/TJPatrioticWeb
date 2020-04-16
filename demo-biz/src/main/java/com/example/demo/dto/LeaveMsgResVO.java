@@ -5,6 +5,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 留言返回对象
@@ -37,7 +38,7 @@ public class LeaveMsgResVO {
     /**
      * 留言层级
      */
-    private Integer msgLevel;
+//    private Integer msgLevel;
     /**
      * 留言时间
      */
@@ -46,4 +47,7 @@ public class LeaveMsgResVO {
     private Date createDate;
 
     private String cityCode;
+
+    private List<LeaveMsgResVO> list;
+
 }
