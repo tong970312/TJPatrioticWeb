@@ -94,7 +94,7 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
         List<LeaveMsgResVO> parentMsg = BeanMapperUtils.mapList(messageList, LeaveMsgResVO.class);
         List<LeaveMsgResVO> allMsg = BeanMapperUtils.mapList(leaveMsgRepository.selectByExample(null),LeaveMsgResVO.class);
 //        //根据所有第一层留言，递归
-        Map<String,LeaveResultVO> resultMap = new HashMap<>();
+        List<LeaveResultVO> allResult = new ArrayList<>();
         for (LeaveMsgResVO msg : parentMsg) {
             LeaveResultVO resultVO = new LeaveResultVO();
             List<LeaveMsgResVO> result = new ArrayList<>();
@@ -107,9 +107,9 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
             }
             resultVO.setCount(result.size()+child.size());
             resultVO.setResult(result);
-           resultMap.put(result.get(0).getCityCode(),resultVO);
+            allResult.add(resultVO);
         }
-        pageModelReq.setData(resultMap);
+        pageModelReq.setData(allResult);
         pageModelReq.setTotal(Long.valueOf(total));
         return Result.success(pageModelReq);
     }
