@@ -18,6 +18,7 @@
     <result column="CREATE_UID" jdbcType="VARCHAR" property="createUid" />
     <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate" />
     <result column="UPDATE_UID" jdbcType="VARCHAR" property="updateUid" />
+    <result column="AREA_CODE" jdbcType="VARCHAR" property="areaCode" />
     <result column="DEL_FLAG" jdbcType="INTEGER" property="delFlag" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -95,7 +96,7 @@
       This element was generated on Tue Apr 07 10:11:07 GMT+08:00 2020.
     -->
     ID, CITY_CODE, PARENT_ID, WORD_AUTHOR_ID, WORD_MASTER_ID, MSG_CONTENT, MSG_LEVEL, 
-    CREATE_DATE, CREATE_UID, UPDATE_DATE, UPDATE_UID, DEL_FLAG
+    CREATE_DATE, CREATE_UID, UPDATE_DATE, UPDATE_UID, DEL_FLAG,AREA_CODE
   </sql>
   <select id="selectByExample" parameterType="com.example.demo.dao.entity.LeaveMessageExample" resultMap="BaseResultMap">
     <!--
@@ -217,6 +218,10 @@
       <if test="delFlag != null">
         DEL_FLAG,
       </if>
+      <if test="areaCode != null">
+        AREA_CODE,
+      </if>
+
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="cityCode != null">

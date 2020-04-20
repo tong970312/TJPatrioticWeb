@@ -44,4 +44,9 @@ public class LeaveMsgReqVO {
      * 城市区县编码
      */
     private String cityCode;
+
+    /**
+     * 景点编码
+     */
+    private String areaCode;
 }

@@ -33,8 +33,10 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
     LeaveMessageRepository leaveMsgRepository;
     @Autowired
     UserInfoUtil userInfoUtil;
+
     /**
      * 留言
+     *
      * @param leaveMsgReqVO
      * @param userInfo
      * @return
@@ -52,8 +54,10 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
         if (StringUtils.isBlank(leaveMsgReqVO.getMsgContent())) {
             return Result.error("留言内容不能为空");
         }
-
-        LeaveMessage leaveMessage = BeanMapperUtils.map(leaveMsgReqVO,LeaveMessage.class);
+        if (StringUtils.isBlank(leaveMsgReqVO.getAreaCode())) {
+            return Result.error("景点编码不能为空");
+        }
+        LeaveMessage leaveMessage = BeanMapperUtils.map(leaveMsgReqVO, LeaveMessage.class);
         leaveMessage.setCreateDate(new Date());
         leaveMessage.setCreateUid(userInfo.getUserNo());
         Integer result = leaveMsgRepository.insertSelective(leaveMessage);
@@ -65,24 +69,25 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
 
     /**
      * 查看留言
-     * @return
+     *
      * @param page
+     * @return
      */
     @Override
     public ResultMessage getMsg(PageParam<LeaveMsgPageVo> page) {
         PageModelReq pageModelReq = new PageModelReq();
-        if (page.getPageNum() <=0) page.setPageNum(1);
-        if (page.getPageSize()<=0) page.setPageSize(5);
+        if (page.getPageNum() <= 0) page.setPageNum(1);
+        if (page.getPageSize() <= 0) page.setPageSize(5);
         page.setPageNum((page.getPageNum() - 1) * page.getPageSize());
         //临时存放父级留言集合
         //查找所有第一层留言,parentId为null
         LeaveMessageExample leaveMessageExample = new LeaveMessageExample();
-        LeaveMessageExample.Criteria criteria =leaveMessageExample.createCriteria();
+        LeaveMessageExample.Criteria criteria = leaveMessageExample.createCriteria();
         criteria.andParentIdIsNull().andDelFlagEqualTo(0);
         leaveMessageExample.setLimit(page.getPageSize());
         leaveMessageExample.setOffset(page.getPageNum());
         //区县编码不为空
-        if (StringUtils.isNotBlank(page.getData().getCityCode())){
+        if (StringUtils.isNotBlank(page.getData().getCityCode())) {
             criteria.andCityCodeEqualTo(page.getData().getCityCode());
         }
         List<LeaveMessage> messageList = leaveMsgRepository.selectByExample(leaveMessageExample);
@@ -92,20 +97,20 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
             return Result.error("当前还没有留言");
         }
         List<LeaveMsgResVO> parentMsg = BeanMapperUtils.mapList(messageList, LeaveMsgResVO.class);
-        List<LeaveMsgResVO> allMsg = BeanMapperUtils.mapList(leaveMsgRepository.selectByExample(null),LeaveMsgResVO.class);
+        List<LeaveMsgResVO> allMsg = BeanMapperUtils.mapList(leaveMsgRepository.selectByExample(null), LeaveMsgResVO.class);
 //        //根据所有第一层留言，递归
         List<LeaveResultVO> allResult = new ArrayList<>();
         for (LeaveMsgResVO msg : parentMsg) {
             LeaveResultVO resultVO = new LeaveResultVO();
             List<LeaveMsgResVO> result = new ArrayList<>();
-            List<LeaveMsgResVO> child = getChild2(msg,allMsg);
+            List<LeaveMsgResVO> child = getChild2(msg, allMsg);
             result.add(msg);
             msg.setList(child);
-            for (LeaveMsgResVO leaveMsg:result) {
+            for (LeaveMsgResVO leaveMsg : result) {
                 leaveMsg.setWordAuthorName(userInfoUtil.getUserInfoByNo(leaveMsg.getWordAuthorId()).getUserName());
                 leaveMsg.setWordMasterName(userInfoUtil.getUserInfoByNo(leaveMsg.getWordMasterId()).getUserName());
             }
-            resultVO.setCount(result.size()+child.size());
+            resultVO.setCount(result.size() + child.size());
             resultVO.setResult(result);
             allResult.add(resultVO);
         }
@@ -114,23 +119,38 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
         return Result.success(pageModelReq);
     }
 
-    //递归子回复方法
-//    private void getChild(LeaveMsgResVO msg){
-//        //查找当前留言层级的下一层
-//         LeaveMsgResVO leaveMsgResVO = BeanMapperUtils.map(leaveMsgRepository.selectByParentId(msg.getId()),LeaveMsgResVO.class);
-//         if (leaveMsgResVO == null) {
-//             return;
-//         }
-//         msg.setChild(leaveMsgResVO);
-//         getChild(leaveMsgResVO);
-//    }
-    private List<LeaveMsgResVO> getChild2(LeaveMsgResVO msg,List<LeaveMsgResVO> allMsg){
+    private List<LeaveMsgResVO> getChild2(LeaveMsgResVO msg, List<LeaveMsgResVO> allMsg) {
         List<LeaveMsgResVO> list = new ArrayList<>();
         for (LeaveMsgResVO leaveMsg : allMsg) {
             if (leaveMsg.getParentId() == msg.getId()) {
-               list.add(leaveMsg);
+                list.add(leaveMsg);
             }
         }
         return list;
+    }
+
+    @Override
+    public ResultMessage getAdminMsg(PageParam<LeaveMsgPageVo> page) {
+        PageModelReq pageModelReq = new PageModelReq();
+        if (page.getPageNum() <= 0) page.setPageNum(1);
+        if (page.getPageSize() <= 0) page.setPageSize(5);
+        page.setPageNum((page.getPageNum() - 1) * page.getPageSize());
+        //临时存放父级留言集合
+        //查找所有第一层留言,parentId为null
+        LeaveMessageExample leaveMessageExample = new LeaveMessageExample();
+        LeaveMessageExample.Criteria criteria = leaveMessageExample.createCriteria();
+        criteria.andParentIdIsNull().andDelFlagEqualTo(0);
+        leaveMessageExample.setLimit(page.getPageSize());
+        leaveMessageExample.setOffset(page.getPageNum());
+        criteria.andWordMasterIdEqualTo("JYJD202011111");
+        List<LeaveMsgResVO> allMsg = BeanMapperUtils.mapList(leaveMsgRepository.selectByExample(leaveMessageExample), LeaveMsgResVO.class);
+        for (LeaveMsgResVO msgResVO: allMsg) {
+            msgResVO.setWordAuthorName(userInfoUtil.getUserInfoByNo(msgResVO.getWordAuthorId()).getUserName());
+            msgResVO.setWordMasterName(userInfoUtil.getUserInfoByNo(msgResVO.getWordMasterId()).getUserName());
+        }
+        Integer total = leaveMsgRepository.countByExample(leaveMessageExample);
+        pageModelReq.setData(allMsg);
+        pageModelReq.setTotal(Long.valueOf(total));
+        return Result.success(pageModelReq);
     }
 }

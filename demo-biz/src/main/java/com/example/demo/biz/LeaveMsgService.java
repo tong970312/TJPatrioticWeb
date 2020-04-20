@@ -21,4 +21,6 @@ public interface LeaveMsgService {
      * @param page
      */
     ResultMessage getMsg(PageParam<LeaveMsgPageVo> page);
+
+    ResultMessage getAdminMsg(PageParam<LeaveMsgPageVo> page);
 }

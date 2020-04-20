@@ -48,6 +48,8 @@ public class LeaveMsgResVO {
 
     private String cityCode;
 
+    private String areaCode;
+
     private List<LeaveMsgResVO> list;
 
 }

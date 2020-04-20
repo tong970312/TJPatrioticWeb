@@ -37,4 +37,15 @@ public class LeaveMsgController extends BaseController {
     public ResultMessage getMsg(@RequestBody PageParam<LeaveMsgPageVo> page){
         return leaveMsgService.getMsg(page);
     }
+
+    /**
+     * 管理员
+     * @return
+     */
+    @PostMapping(value = "/getAdminMsg")
+    public ResultMessage getAdminMsg(@RequestBody PageParam<LeaveMsgPageVo> page){
+        return leaveMsgService.getAdminMsg(page);
+    }
+
+
 }
