@@ -27,7 +27,7 @@ spring:
         max-wait: 10000ms
 #访问服务器图片的url
 image:
-  url: http://123.57.133.58/images/
+  url: http://123.57.133.58:7777/images/
 
 #设置更新时间
 USER_SESSION_EXPIRE: 1800
