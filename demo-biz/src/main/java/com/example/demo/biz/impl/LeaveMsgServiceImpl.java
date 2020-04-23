@@ -60,6 +60,7 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
         LeaveMessage leaveMessage = BeanMapperUtils.map(leaveMsgReqVO, LeaveMessage.class);
         leaveMessage.setCreateDate(new Date());
         leaveMessage.setCreateUid(userInfo.getUserNo());
+        leaveMessage.setDelFlag(0);
         Integer result = leaveMsgRepository.insertSelective(leaveMessage);
         if (result <= 0) {
             throw new ServiceException("留言失败");
