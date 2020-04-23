@@ -34,7 +34,8 @@ public class LoginFilter implements Filter {
     public final static List<String> chainListUrls =
             new ArrayList<String>(Arrays.asList("/admin/login",
                                             "/baseNews/test",
-                                            "/baseNews/test",
+                                            "/baseNews/getAllNews",
+                                            "/leaveMsg/getMsg",
                                             "/admin/register",
                                             "/admin/checkAccount",
                                             "/admin/sendValidCode"));
@@ -50,7 +51,7 @@ public class LoginFilter implements Filter {
         String paramNo = request.getHeader("userNo");
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         //当前请求属于直接放行
-        if (chainListUrls2.contains(request.getRequestURI())) {
+        if (chainListUrls.contains(request.getRequestURI())) {
             //设置跨域
             allowCrossOrigin(request, response);
             //请求放行
