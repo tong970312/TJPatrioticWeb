@@ -8,6 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.RedisSystemException;
 import org.springframework.stereotype.Component;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -80,6 +86,32 @@ public class LoginFilter implements Filter {
     public void destroy() {
         log.info("LoginFilter destroy");
     }
+
+
+    /**
+     * cors support
+     * @return
+     */
+    @Bean
+    public FilterRegistrationBean corsFilter() {
+        // 注册CORS过滤器
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true); // 是否支持安全证书
+        config.addAllowedOrigin("*"); // 允许任何域名使用
+        config.addAllowedHeader("*"); // 允许任何头
+        config.addAllowedMethod("*"); // 允许任何方法（post、get等）
+        // 预检请求的有效期，单位为秒。
+        //        config.setMaxAge(3600L);
+
+        source.registerCorsConfiguration("/**", config);
+        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+        bean.setOrder(0);
+        return bean;
+    }
+
+
+
     /**
      * 设置允许跨域
      * @param response
