@@ -34,9 +34,14 @@ public class LoginFilter implements Filter {
     public final static List<String> chainListUrls =
             new ArrayList<String>(Arrays.asList("/admin/login",
                                             "/baseNews/test",
+                                            "/baseNews/test",
                                             "/admin/register",
                                             "/admin/checkAccount",
                                             "/admin/sendValidCode"));
+    //需要拦截的
+    public final static List<String> chainListUrls2 =
+            new ArrayList<String>(Arrays.asList("/leaveMsg/communication"));
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
@@ -45,7 +50,7 @@ public class LoginFilter implements Filter {
         String paramNo = request.getHeader("userNo");
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         //当前请求属于直接放行
-        if (chainListUrls.contains(request.getRequestURI())) {
+        if (chainListUrls2.contains(request.getRequestURI())) {
             //设置跨域
             allowCrossOrigin(request, response);
             //请求放行
@@ -85,7 +90,7 @@ public class LoginFilter implements Filter {
         response.setHeader("Pragma","No-cache");
         response.setHeader("Cache-Control","no-cache");
         response.setDateHeader("Expires", 0);
-        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Credentials","true"); //是否支持cookie跨域
