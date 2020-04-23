@@ -33,7 +33,6 @@ public class LoginFilter implements Filter {
     //直接放行的请求
     public final static List<String> chainListUrls =
             new ArrayList<String>(Arrays.asList("/admin/login",
-                                            "/baseNews/test",
                                             "/baseNews/getAllNews",
                                             "/leaveMsg/getMsg",
                                             "/admin/register",
@@ -88,13 +87,19 @@ public class LoginFilter implements Filter {
     private void allowCrossOrigin(HttpServletRequest request, HttpServletResponse response) {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
-        response.setHeader("Pragma","No-cache");
-        response.setHeader("Cache-Control","no-cache");
-        response.setDateHeader("Expires", 0);
         response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, HEAD, OPTIONS, PUT, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Credentials","true"); //是否支持cookie跨域
         response.setHeader("Access-Control-Allow-Headers", "accept, content-type, userNo");
+//
+//        response.setHeader("Pragma","No-cache");
+//        response.setHeader("Cache-Control","no-cache");
+//        response.setDateHeader("Expires", 0);
+//        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+//        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+//        response.setHeader("Access-Control-Max-Age", "3600");
+//        response.setHeader("Access-Control-Allow-Credentials","true"); //是否支持cookie跨域
+//        response.setHeader("Access-Control-Allow-Headers", "accept, content-type, userNo");
     }
 }
