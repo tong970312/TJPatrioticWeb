@@ -50,6 +50,8 @@ public class LeaveMsgResVO {
 
     private String areaCode;
 
+    private String areaName;
+
     private List<LeaveMsgResVO> list;
 
 }

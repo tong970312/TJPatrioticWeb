@@ -10,6 +10,7 @@ import com.example.demo.dto.PageModelReq;
 import com.example.demo.dao.repository.BaseDetailRepository;
 import com.example.demo.dto.BaseDetailReqDTO;
 import com.util.BeanMapperUtils;
+import com.util.RedisUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -37,7 +39,8 @@ public class BaseAreaServiceImpl implements BaseAreaService {
     String imageUrl;
     @Value("${local.url}")
     String localUrl;
-
+    @Autowired
+    RedisUtil redisUtil;
     /**
      * 基地信息新增
      * @param baseDetailReqDTO
@@ -87,7 +90,14 @@ public class BaseAreaServiceImpl implements BaseAreaService {
             logger.error("新增基地数据失败");
             return Result.error("新增基地数据失败");
         }
-
+        List<BaseDetail> allBase = baseDetailRepository.selectByExample(null);
+        if (!CollectionUtils.isEmpty(allBase)) {
+            Map<Integer,String> baseInfoMap = new HashMap<>();
+            for (BaseDetail detail : allBase) {
+                baseInfoMap.put(detail.getId(),detail.getBaseName());
+            }
+            redisUtil.set2("baseInfos",baseInfoMap);
+        }
         return Result.success("新增基地成功");
     }
 

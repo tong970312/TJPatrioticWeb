@@ -9,6 +9,7 @@ import com.example.demo.dao.entity.LeaveMessage;
 import com.example.demo.dao.entity.UserInfo;
 import com.example.demo.dao.repository.LeaveMessageRepository;
 import com.exception.ServiceException;
+import com.util.BaseUtil;
 import com.util.BeanMapperUtils;
 import com.util.JsonUtil;
 import com.util.UserInfoUtil;
@@ -33,7 +34,8 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
     LeaveMessageRepository leaveMsgRepository;
     @Autowired
     UserInfoUtil userInfoUtil;
-
+    @Autowired
+    BaseUtil baseUtil;
     /**
      * 留言
      *
@@ -103,20 +105,34 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
         if (CollectionUtils.isEmpty(messageList)) {
             return Result.error("当前还没有留言");
         }
-        List<LeaveMsgResVO> parentMsg = BeanMapperUtils.mapList(messageList, LeaveMsgResVO.class);
-        List<LeaveMsgResVO> allMsg = BeanMapperUtils.mapList(leaveMsgRepository.selectByExample(null), LeaveMsgResVO.class);
-//        //根据所有第一层留言，递归
+//        List<LeaveMsgResVO> parentMsg = BeanMapperUtils.mapList(messageList, LeaveMsgResVO.class);
+        List<LeaveMsgResVO> parentMsg = new ArrayList<>();
+        LeaveMessageExample leaveMessageExample2 = new LeaveMessageExample();
+        leaveMessageExample2.createCriteria().andDelFlagEqualTo(0);
+        List<LeaveMsgResVO> allMsg = BeanMapperUtils.mapList(leaveMsgRepository.selectByExample(leaveMessageExample2), LeaveMsgResVO.class);
+        if (!CollectionUtils.isEmpty(allMsg)) {
+            for (LeaveMsgResVO resVO : allMsg) {
+                resVO.setAreaName(baseUtil.getBaseInfoByNo(resVO.getAreaCode()));
+                resVO.setWordAuthorName(userInfoUtil.getUserInfoByNo(resVO.getWordAuthorId()).getUserName());
+                resVO.setWordMasterName(userInfoUtil.getUserInfoByNo(resVO.getWordMasterId()).getUserName());
+                if (resVO.getParentId() == null){
+                    parentMsg.add(resVO);
+                }
+            }
+        }
+       //根据所有第一层留言，递归
         List<LeaveResultVO> allResult = new ArrayList<>();
         for (LeaveMsgResVO msg : parentMsg) {
+            msg.setAreaName(baseUtil.getBaseInfoByNo(msg.getAreaCode()));
             LeaveResultVO resultVO = new LeaveResultVO();
             List<LeaveMsgResVO> result = new ArrayList<>();
             List<LeaveMsgResVO> child = getChild2(msg, allMsg);
             result.add(msg);
             msg.setList(child);
-            for (LeaveMsgResVO leaveMsg : result) {
-                leaveMsg.setWordAuthorName(userInfoUtil.getUserInfoByNo(leaveMsg.getWordAuthorId()).getUserName());
-                leaveMsg.setWordMasterName(userInfoUtil.getUserInfoByNo(leaveMsg.getWordMasterId()).getUserName());
-            }
+//            for (LeaveMsgResVO leaveMsg : result) {
+//                leaveMsg.setWordAuthorName(userInfoUtil.getUserInfoByNo(leaveMsg.getWordAuthorId()).getUserName());
+//                leaveMsg.setWordMasterName(userInfoUtil.getUserInfoByNo(leaveMsg.getWordMasterId()).getUserName());
+//            }
             resultVO.setCount(result.size() + child.size());
             resultVO.setResult(result);
             allResult.add(resultVO);
