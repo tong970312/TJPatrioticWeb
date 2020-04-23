@@ -28,4 +28,5 @@ public class PageParam<T> {
         this.pageSize = pageSize;
         startIndex = (pageNum - 1) * pageSize;
     }
+
 }

@@ -97,42 +97,35 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
         leaveMessageExample.setOffset(page.getPageNum());
         //区县编码不为空
         if (StringUtils.isNotBlank(page.getData().getCityCode())) {
-            criteria.andCityCodeEqualTo(page.getData().getCityCode());
+            criteria.andAreaCodeEqualTo(page.getData().getCityCode());
         }
-        List<LeaveMessage> messageList = leaveMsgRepository.selectByExample(leaveMessageExample);
+        List<LeaveMsgResVO> parentMsg = leaveMsgRepository.selectByExample2(page);
         Integer total = leaveMsgRepository.countByExample(leaveMessageExample);
         //非空限制父节点就可以
-        if (CollectionUtils.isEmpty(messageList)) {
+        if (CollectionUtils.isEmpty(parentMsg)) {
             return Result.error("当前还没有留言");
         }
-//        List<LeaveMsgResVO> parentMsg = BeanMapperUtils.mapList(messageList, LeaveMsgResVO.class);
-        List<LeaveMsgResVO> parentMsg = new ArrayList<>();
         LeaveMessageExample leaveMessageExample2 = new LeaveMessageExample();
         leaveMessageExample2.createCriteria().andDelFlagEqualTo(0);
-        List<LeaveMsgResVO> allMsg = BeanMapperUtils.mapList(leaveMsgRepository.selectByExample(leaveMessageExample2), LeaveMsgResVO.class);
+        List<LeaveMsgResVO> allMsg = leaveMsgRepository.selectAll();
         if (!CollectionUtils.isEmpty(allMsg)) {
             for (LeaveMsgResVO resVO : allMsg) {
                 resVO.setAreaName(baseUtil.getBaseInfoByNo(resVO.getAreaCode()));
                 resVO.setWordAuthorName(userInfoUtil.getUserInfoByNo(resVO.getWordAuthorId()).getUserName());
                 resVO.setWordMasterName(userInfoUtil.getUserInfoByNo(resVO.getWordMasterId()).getUserName());
-                if (resVO.getParentId() == null){
-                    parentMsg.add(resVO);
-                }
             }
         }
        //根据所有第一层留言，递归
         List<LeaveResultVO> allResult = new ArrayList<>();
         for (LeaveMsgResVO msg : parentMsg) {
             msg.setAreaName(baseUtil.getBaseInfoByNo(msg.getAreaCode()));
+            msg.setWordAuthorName(userInfoUtil.getUserInfoByNo(msg.getWordAuthorId()).getUserName());
+            msg.setWordMasterName(userInfoUtil.getUserInfoByNo(msg.getWordMasterId()).getUserName());
             LeaveResultVO resultVO = new LeaveResultVO();
             List<LeaveMsgResVO> result = new ArrayList<>();
             List<LeaveMsgResVO> child = getChild2(msg, allMsg);
             result.add(msg);
             msg.setList(child);
-//            for (LeaveMsgResVO leaveMsg : result) {
-//                leaveMsg.setWordAuthorName(userInfoUtil.getUserInfoByNo(leaveMsg.getWordAuthorId()).getUserName());
-//                leaveMsg.setWordMasterName(userInfoUtil.getUserInfoByNo(leaveMsg.getWordMasterId()).getUserName());
-//            }
             resultVO.setCount(result.size() + child.size());
             resultVO.setResult(result);
             allResult.add(resultVO);

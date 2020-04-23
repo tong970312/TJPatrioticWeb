@@ -292,6 +292,10 @@ public class LeaveMessageExample {
             return (Criteria) this;
         }
 
+        public Criteria andAreaCodeEqualTo(String value) {
+            addCriterion("AREA_CODE =", value, "areaCode");
+            return (Criteria) this;
+        }
         public Criteria andCityCodeNotEqualTo(String value) {
             addCriterion("CITY_CODE <>", value, "cityCode");
             return (Criteria) this;
