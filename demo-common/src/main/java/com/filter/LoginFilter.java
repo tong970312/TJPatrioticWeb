@@ -40,13 +40,11 @@ public class LoginFilter implements Filter {
     public final static List<String> chainListUrls =
             new ArrayList<String>(Arrays.asList("/admin/login",
                                             "/baseNews/getAllNews",
+                                            "/baseNews/details",
                                             "/leaveMsg/getMsg",
                                             "/admin/register",
                                             "/admin/checkAccount",
                                             "/admin/sendValidCode"));
-    //需要拦截的
-    public final static List<String> chainListUrls2 =
-            new ArrayList<String>(Arrays.asList("/leaveMsg/communication"));
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
