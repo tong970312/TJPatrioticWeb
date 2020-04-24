@@ -165,6 +165,19 @@ public class BaseNewsServiceImpl implements BaseNewsService {
         return  Result.success("删除成功");
     }
 
+    @Override
+    public ResultMessage getNewsDetail(String id) {
+        if (StringUtils.isEmpty(id)) {
+            logger.error("查询参数为空");
+            return Result.error("查询参数为空");
+        }
+        BaseNews baseNews = baseNewsRepository.selectByPrimaryKey(Integer.valueOf(id));
+        if (baseNews == null) {
+            return Result.error("查询失败");
+        }
+        return  Result.success("查询成功");
+    }
+
 //    @Override
 //    public ResultMessage test() {
 //        //初始化

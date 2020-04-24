@@ -47,6 +47,12 @@ public class BaseNewsController {
       return baseNewsService.delNews(id);
     }
 
+    @GetMapping(value = "/getNewsDetail")
+    public ResultMessage getNewsDetail(@Param("id") String id){
+      return baseNewsService.getNewsDetail(id);
+    }
+
+
     @GetMapping(value = "/test")
     public ResultMessage test(){
       return Result.success("测试jenkins");
