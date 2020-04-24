@@ -40,6 +40,7 @@ public class LoginFilter implements Filter {
     public final static List<String> chainListUrls =
             new ArrayList<String>(Arrays.asList("/admin/login",
                                             "/baseNews/getAllNews",
+                                            "/base/baseList",
                                             "/baseNews/details",
                                             "/leaveMsg/getMsg",
                                             "/admin/register",
