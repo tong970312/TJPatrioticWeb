@@ -19,7 +19,7 @@ public class BaseNewsResVO {
 
     private Integer delFlag;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:MM:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
 //    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createDate;
 
