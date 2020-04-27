@@ -42,6 +42,7 @@ public class LoginFilter implements Filter {
                                             "/baseNews/getAllNews",
                                             "/base/baseList",
                                             "/baseNews/details",
+                                            "/baseNews/getNewsDetail",
                                             "/base/details",
                                             "/leaveMsg/getMsg",
                                             "/admin/register",
