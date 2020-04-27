@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -166,16 +167,21 @@ public class BaseNewsServiceImpl implements BaseNewsService {
     }
 
     @Override
-    public ResultMessage getNewsDetail(String id) {
-        if (StringUtils.isEmpty(id)) {
+    public ResultMessage getNewsDetail(Integer id) {
+        if (id == null) {
             logger.error("查询参数为空");
             return Result.error("查询参数为空");
         }
-        BaseNews baseNews = baseNewsRepository.selectByPrimaryKey(Integer.valueOf(id));
+        BaseNews baseNews = baseNewsRepository.selectByPrimaryKey(id);
         if (baseNews == null) {
             return Result.error("查询失败");
         }
-        return  Result.success(baseNews);
+        BaseNewsDetail baseNewsDetail = new BaseNewsDetail();
+        baseNewsDetail.setContent(baseNews.getContent());
+        baseNewsDetail.setId(baseNews.getId());
+        baseNewsDetail.setTitle(baseNews.getTitle());
+        baseNewsDetail.setCreateDate(new SimpleDateFormat("yyyy-MM-dd").format(baseNews.getCreateDate()));
+        return  Result.success(baseNewsDetail);
     }
 
 //    @Override

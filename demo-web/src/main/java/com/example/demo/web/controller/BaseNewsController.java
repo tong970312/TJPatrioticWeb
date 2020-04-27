@@ -48,7 +48,7 @@ public class BaseNewsController {
     }
 
     @GetMapping(value = "/getNewsDetail")
-    public ResultMessage getNewsDetail(@Param("id") String id){
+    public ResultMessage getNewsDetail(@Param("id") Integer id){
       return baseNewsService.getNewsDetail(id);
     }
 
