@@ -163,6 +163,7 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
         for (LeaveMsgResVO msgResVO: allMsg) {
             msgResVO.setWordAuthorName(userInfoUtil.getUserInfoByNo(msgResVO.getWordAuthorId()).getUserName());
             msgResVO.setWordMasterName(userInfoUtil.getUserInfoByNo(msgResVO.getWordMasterId()).getUserName());
+            msgResVO.setAreaName(baseUtil.getBaseInfoByNo(msgResVO.getAreaCode()));
         }
         Integer total = leaveMsgRepository.countByExample(leaveMessageExample);
         pageModelReq.setData(allMsg);
