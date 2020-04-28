@@ -45,6 +45,15 @@ public class BaseAreaController extends BaseController {
     public ResultMessage getBaseList(@RequestBody BaseListReqVO baseListReqVO){
         return baseAreaService.getBaseList(baseListReqVO);
     }
+    /**
+     * 获取市内基地列表
+     * @param baseListReqVO
+     * @return
+     */
+    @PostMapping(value = "/baseList2")
+    public ResultMessage getBaseList2(@RequestBody BaseListReqVO baseListReqVO){
+        return baseAreaService.getBaseList(baseListReqVO);
+    }
 
     /**
      * 修改基地内容

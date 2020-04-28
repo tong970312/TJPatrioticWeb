@@ -74,10 +74,10 @@ public class BaseNewsServiceImpl implements BaseNewsService {
     @Transactional
     @Override
     public ResultMessage insertNews(BaseNewsResVO baseNewsReqDTO, UserInfo userInfo) {
-        if (baseNewsReqDTO.getParentId() == null) {
-            logger.error("所属区县为空");
-            return Result.error("请选择所属区县");
-        }
+//        if (baseNewsReqDTO.getParentId() == null) {
+//            logger.error("所属区县为空");
+//            return Result.error("请选择所属区县");
+//        }
         if (StringUtils.isEmpty(baseNewsReqDTO.getTitle())) {
             logger.error("资讯标题为空");
             return Result.error("资讯标题不能为空");
@@ -118,10 +118,10 @@ public class BaseNewsServiceImpl implements BaseNewsService {
             logger.error("当前id为空");
             return Result.error("更新参数错误");
         }
-        if (baseNewsReqDTO.getParentId() == null) {
-            logger.error("所属区县为空");
-            return Result.error("请选择所属区县");
-        }
+//        if (baseNewsReqDTO.getParentId() == null) {
+//            logger.error("所属区县为空");
+//            return Result.error("请选择所属区县");
+//        }
         if (StringUtils.isEmpty(baseNewsReqDTO.getTitle())) {
             logger.error("资讯标题为空");
             return Result.error("资讯标题不能为空");
@@ -138,7 +138,7 @@ public class BaseNewsServiceImpl implements BaseNewsService {
         baseNews.setUpdateUid(userInfo.getUserName()+"/"+userInfo.getUserNo());
         baseNews.setUpdateDate(new Date());
         try {
-            baseNewsRepository.updateByPrimaryKey(baseNews);
+            baseNewsRepository.updateByPrimaryKeySelective(baseNews);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("修改资讯内容失败");

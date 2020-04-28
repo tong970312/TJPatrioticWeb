@@ -344,7 +344,8 @@
       This element was generated on Thu Mar 26 16:32:47 GMT+08:00 2020.
     -->
     update BASE_NEWS
-    set PARENT_ID = #{parentId,jdbcType=INTEGER},
+    set
+     PARENT_ID = #{parentId,jdbcType=INTEGER},
       TITLE = #{title,jdbcType=VARCHAR},
       CONTENT = #{content,jdbcType=VARCHAR},
       CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},

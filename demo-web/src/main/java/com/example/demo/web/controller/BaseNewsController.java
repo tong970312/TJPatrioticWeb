@@ -29,6 +29,11 @@ public class BaseNewsController {
     public ResultMessage getAllNews(@RequestBody BaseNewsReqDTO baseNewsReqDTO){
       return baseNewsService.getAllNews(baseNewsReqDTO);
     }
+    @PostMapping(value = "/getAllNews2")
+    public ResultMessage getAllNews2(@RequestBody BaseNewsReqDTO baseNewsReqDTO){
+      return baseNewsService.getAllNews(baseNewsReqDTO);
+    }
+
 
     @PostMapping(value = "/insertNews")
     public ResultMessage insertNews(@RequestBody BaseNewsResVO baseNewsReqDTO, HttpServletRequest request){
