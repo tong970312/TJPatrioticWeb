@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -32,6 +33,9 @@ public class LoginServiceImpl implements LoginService {
     UserInfoUtil userInfoUtil;
     @Autowired
     MailUtil mailUtil;
+    @Value("${userInfo.key}")
+    String userKey;
+    
     protected static final Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
 
     private static final char[] VALID_CODE_CHARS = {'1', '2', '3', '4', '5', '6', '7', '8', '9','0', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
@@ -129,7 +133,7 @@ public class LoginServiceImpl implements LoginService {
             for (UserInfo users : allUser) {
                 userInfoMap.put(users.getUserNo(),users);
             }
-            redisUtil.set2("userInfos",userInfoMap);
+            redisUtil.set2(userKey,userInfoMap);
         }
         return Result.success("注册成功");
     }

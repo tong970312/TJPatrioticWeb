@@ -41,6 +41,8 @@ public class BaseAreaServiceImpl implements BaseAreaService {
     String localUrl;
     @Autowired
     RedisUtil redisUtil;
+    @Value("${baseInfo.key}")
+    String baseInfoKey;
     /**
      * 基地信息新增
      * @param baseDetailReqDTO
@@ -96,7 +98,7 @@ public class BaseAreaServiceImpl implements BaseAreaService {
             for (BaseDetail detail : allBase) {
                 baseInfoMap.put(detail.getId(),detail.getBaseName());
             }
-            redisUtil.set2("baseInfos",baseInfoMap);
+            redisUtil.set2(baseInfoKey,baseInfoMap);
         }
         return Result.success("新增基地成功");
     }
@@ -117,7 +119,14 @@ public class BaseAreaServiceImpl implements BaseAreaService {
             return Result.error("查询结果为空");
         }
         BaseDetailReqDTO baseDetailReqDTO = BeanMapperUtils.map(baseDetail,BaseDetailReqDTO.class);
-
+        List<BaseDetail> allBase = baseDetailRepository.selectByExample(null);
+        if (!CollectionUtils.isEmpty(allBase)) {
+            Map<Integer,String> baseInfoMap = new HashMap<>();
+            for (BaseDetail detail : allBase) {
+                baseInfoMap.put(detail.getId(),detail.getBaseName());
+            }
+            redisUtil.set2(baseInfoKey,baseInfoMap);
+        }
         return Result.success("成功",baseDetailReqDTO);
     }
 

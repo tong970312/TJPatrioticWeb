@@ -53,3 +53,8 @@ email:
   emailSMTPHost: smtp.qq.com
   sendEmailAccount: 1274961697@qq.com
   sendEmailPrivateCode: jrifnmhmplgmhgej
+
+userInfo:
+  key: userInfos-prd
+baseInfo:
+  key: baseInfos-prd

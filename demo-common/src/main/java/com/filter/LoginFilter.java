@@ -32,9 +32,15 @@ public class LoginFilter implements Filter {
     RedisUtil redisUtil;
     @Value("${USER_SESSION_EXPIRE}")
     private Integer USER_SESSION_EXPIRE;
+    @Value("${baseInfo.key}")
+    String baseInfoKey;
+    @Value("${userInfo.key}")
+    String userKey;
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         log.info("LoginFilter init");
+        log.info("userInfoKey:"+userKey);
+        log.info("baseInfoKey:"+baseInfoKey);
     }
     //直接放行的请求
     public final static List<String> chainListUrls =
