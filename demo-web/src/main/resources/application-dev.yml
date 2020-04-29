@@ -16,7 +16,7 @@ spring:
 #redis配置
   redis:
     password: Wq970424++
-    database: 0
+    database: 1
     port: 7424
     host: 123.57.133.58
     lettuce:
