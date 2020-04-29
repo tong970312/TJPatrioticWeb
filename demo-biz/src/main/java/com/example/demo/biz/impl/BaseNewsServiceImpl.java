@@ -47,6 +47,7 @@ public class BaseNewsServiceImpl implements BaseNewsService {
         Integer offset = (currentPage - 1) * limit;
         baseNewsExample.setLimit(limit);
         baseNewsExample.setOffset(offset);
+        baseNewsExample.setOrderByClause("CREATE_DATE DESC");
         List<BaseNews> list = baseNewsRepository.selectByExample(baseNewsExample);
         Long count = baseNewsRepository.countByExample(baseNewsExample);
         PageModelReq pageModelReq = new PageModelReq();

@@ -119,14 +119,6 @@ public class BaseAreaServiceImpl implements BaseAreaService {
             return Result.error("查询结果为空");
         }
         BaseDetailReqDTO baseDetailReqDTO = BeanMapperUtils.map(baseDetail,BaseDetailReqDTO.class);
-        List<BaseDetail> allBase = baseDetailRepository.selectByExample(null);
-        if (!CollectionUtils.isEmpty(allBase)) {
-            Map<Integer,String> baseInfoMap = new HashMap<>();
-            for (BaseDetail detail : allBase) {
-                baseInfoMap.put(detail.getId(),detail.getBaseName());
-            }
-            redisUtil.set2(baseInfoKey,baseInfoMap);
-        }
         return Result.success("成功",baseDetailReqDTO);
     }
 
