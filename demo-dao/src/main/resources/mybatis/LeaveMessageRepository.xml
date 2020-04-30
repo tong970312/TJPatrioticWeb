@@ -524,7 +524,7 @@
     WHERE 1=1 AND l.DEL_FLAG = 0 and l.PARENT_ID is null
     <if test="page != null">
       <if test="page.data.cityCode != null and page.data.cityCode != ''">
-        and l.CITY_CODE = #{page.data.cityCode}
+        and l.AREA_CODE = #{page.data.cityCode}
       </if>
     </if>
   </sql>
