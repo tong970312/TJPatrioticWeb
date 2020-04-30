@@ -12,6 +12,22 @@ import java.util.List;
  */
 @Data
 public class LeaveMsgResVO {
+    @Override
+    public String toString() {
+        return "LeaveMsgResVO{" +
+                "id=" + id +
+                ", parentId=" + parentId +
+                ", wordAuthorId='" + wordAuthorId + '\'' +
+                ", wordAuthorName='" + wordAuthorName + '\'' +
+                ", wordMasterId='" + wordMasterId + '\'' +
+                ", wordMasterName='" + wordMasterName + '\'' +
+                ", msgContent='" + msgContent + '\'' +
+                ", createDate=" + createDate +
+                ", cityCode='" + cityCode + '\'' +
+                ", areaCode='" + areaCode + '\'' +
+                ", areaName='" + areaName + '\'' +
+                '}';
+    }
 
     /**
      * 主键

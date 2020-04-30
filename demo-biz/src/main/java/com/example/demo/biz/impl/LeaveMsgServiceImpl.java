@@ -88,39 +88,17 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
         if (page.getPageNum() <= 0) page.setPageNum(1);
         if (page.getPageSize() <= 0) page.setPageSize(5);
         page.setPageNum((page.getPageNum() - 1) * page.getPageSize());
-        //临时存放父级留言集合
-        //查找所有第一层留言,parentId为null
-        LeaveMessageExample leaveMessageExample = new LeaveMessageExample();
-        LeaveMessageExample.Criteria criteria = leaveMessageExample.createCriteria();
-        criteria.andParentIdIsNull().andDelFlagEqualTo(0);
-        leaveMessageExample.setLimit(page.getPageSize());
-        leaveMessageExample.setOffset(page.getPageNum());
-        //区县编码不为空
-        if (StringUtils.isNotBlank(page.getData().getCityCode())) {
-            criteria.andAreaCodeEqualTo(page.getData().getCityCode());
-        }
-        List<LeaveMsgResVO> parentMsg = leaveMsgRepository.selectByExample2(page);
-        Integer total = leaveMsgRepository.countByExample(leaveMessageExample);
+        //存放父级留言集合
+        List<LeaveMsgResVO> parentMsg = leaveMsgRepository.getParentMsg(page);
+        Integer total = leaveMsgRepository.getParentMsgCount();
         //非空限制父节点就可以
         if (CollectionUtils.isEmpty(parentMsg)) {
             return Result.error("当前还没有留言");
         }
-        LeaveMessageExample leaveMessageExample2 = new LeaveMessageExample();
-        leaveMessageExample2.createCriteria().andDelFlagEqualTo(0);
         List<LeaveMsgResVO> allMsg = leaveMsgRepository.selectAll();
-        if (!CollectionUtils.isEmpty(allMsg)) {
-            for (LeaveMsgResVO resVO : allMsg) {
-                resVO.setAreaName(baseUtil.getBaseInfoByNo(resVO.getAreaCode()));
-                resVO.setWordAuthorName(userInfoUtil.getUserInfoByNo(resVO.getWordAuthorId()).getUserName());
-                resVO.setWordMasterName(userInfoUtil.getUserInfoByNo(resVO.getWordMasterId()).getUserName());
-            }
-        }
        //根据所有第一层留言，递归
         List<LeaveResultVO> allResult = new ArrayList<>();
         for (LeaveMsgResVO msg : parentMsg) {
-            msg.setAreaName(baseUtil.getBaseInfoByNo(msg.getAreaCode()));
-            msg.setWordAuthorName(userInfoUtil.getUserInfoByNo(msg.getWordAuthorId()).getUserName());
-            msg.setWordMasterName(userInfoUtil.getUserInfoByNo(msg.getWordMasterId()).getUserName());
             LeaveResultVO resultVO = new LeaveResultVO();
             List<LeaveMsgResVO> result = new ArrayList<>();
             List<LeaveMsgResVO> child = getChild2(msg, allMsg);
