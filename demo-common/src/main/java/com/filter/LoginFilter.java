@@ -39,8 +39,8 @@ public class LoginFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         log.info("LoginFilter init");
-        log.info("userInfoKey:"+userKey);
-        log.info("baseInfoKey:"+baseInfoKey);
+        log.info("初始化加载的 userInfoKey:"+userKey);
+        log.info("初始化加载的 baseInfoKey:"+baseInfoKey);
     }
     //直接放行的请求
     public final static List<String> chainListUrls =
@@ -61,6 +61,7 @@ public class LoginFilter implements Filter {
         log.info("LoginFilter doFilter");
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String paramNo = request.getHeader("userNo");
+        log.info("requestURL:="+request.getRequestURI());
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         //当前请求属于直接放行
         if (chainListUrls.contains(request.getRequestURI())) {
