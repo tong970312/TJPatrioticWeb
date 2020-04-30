@@ -119,6 +119,9 @@ public class BaseAreaServiceImpl implements BaseAreaService {
             return Result.error("查询结果为空");
         }
         BaseDetailReqDTO baseDetailReqDTO = BeanMapperUtils.map(baseDetail,BaseDetailReqDTO.class);
+        if (StringUtils.equals("无",baseDetailReqDTO.getPublicTransportation())) {
+            baseDetailReqDTO.setPublicTransportation("");
+        }
         return Result.success("成功",baseDetailReqDTO);
     }
 
