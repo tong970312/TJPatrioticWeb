@@ -548,7 +548,7 @@
     l.CREATE_DATE DESC
     LIMIT #{page.pageNum},#{page.pageSize}
   </select>
-  <select id="getParentMsgCount" resultType="java.lang.Integer">
+  <select id="getParentMsgCount"  parameterType="com.example.demo.dto.PageParam" resultType="java.lang.Integer">
     select count(1)
     from LEAVE_MESSAGE l
     left join BASE_DETAIL b on l.AREA_CODE = b.ID

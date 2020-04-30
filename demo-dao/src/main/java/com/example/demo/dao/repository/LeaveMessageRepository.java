@@ -113,5 +113,5 @@ public interface LeaveMessageRepository {
 
     List<LeaveMsgResVO> getParentMsg(@Param("page") PageParam<LeaveMsgPageVo> page);
 
-    Integer getParentMsgCount();
+    Integer getParentMsgCount(@Param("page") PageParam<LeaveMsgPageVo> page);
 }

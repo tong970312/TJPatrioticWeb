@@ -90,7 +90,7 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
         page.setPageNum((page.getPageNum() - 1) * page.getPageSize());
         //存放父级留言集合
         List<LeaveMsgResVO> parentMsg = leaveMsgRepository.getParentMsg(page);
-        Integer total = leaveMsgRepository.getParentMsgCount();
+        Integer total = leaveMsgRepository.getParentMsgCount(page);
         //非空限制父节点就可以
         if (CollectionUtils.isEmpty(parentMsg)) {
             return Result.error("当前还没有留言");
@@ -104,7 +104,7 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
             List<LeaveMsgResVO> child = getChild2(msg, allMsg);
             result.add(msg);
             msg.setList(child);
-            resultVO.setCount(result.size() + child.size());
+            resultVO.setCount(result.size());
             resultVO.setResult(result);
             allResult.add(resultVO);
         }
