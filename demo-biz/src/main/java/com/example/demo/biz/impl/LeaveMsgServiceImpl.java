@@ -153,19 +153,8 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
         page.setPageNum((page.getPageNum() - 1) * page.getPageSize());
         //临时存放父级留言集合
         //查找所有第一层留言,parentId为null
-        LeaveMessageExample leaveMessageExample = new LeaveMessageExample();
-        LeaveMessageExample.Criteria criteria = leaveMessageExample.createCriteria();
-        criteria.andParentIdIsNull().andDelFlagEqualTo(0);
-        leaveMessageExample.setLimit(page.getPageSize());
-        leaveMessageExample.setOffset(page.getPageNum());
-        criteria.andWordMasterIdEqualTo("JYJD202011111");
-        List<LeaveMsgResVO> allMsg = BeanMapperUtils.mapList(leaveMsgRepository.selectByExample(leaveMessageExample), LeaveMsgResVO.class);
-        for (LeaveMsgResVO msgResVO: allMsg) {
-            msgResVO.setWordAuthorName(userInfoUtil.getUserInfoByNo(msgResVO.getWordAuthorId()).getUserName());
-            msgResVO.setWordMasterName(userInfoUtil.getUserInfoByNo(msgResVO.getWordMasterId()).getUserName());
-            msgResVO.setAreaName(baseUtil.getBaseInfoByNo(msgResVO.getAreaCode()));
-        }
-        Integer total = leaveMsgRepository.countByExample(leaveMessageExample);
+        List<LeaveMsgResVO> allMsg = leaveMsgRepository.getAllMsg(page);
+        Integer total = leaveMsgRepository.countByPage();
         pageModelReq.setData(allMsg);
         pageModelReq.setTotal(Long.valueOf(total));
         return Result.success(pageModelReq);
