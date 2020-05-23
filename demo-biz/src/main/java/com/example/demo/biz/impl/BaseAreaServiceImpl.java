@@ -143,10 +143,14 @@ public class BaseAreaServiceImpl implements BaseAreaService {
         baseDetailExample.createCriteria().andParentIdEqualTo(baseListReqVO.getParentId());
         Integer limit = baseListReqVO.getPageSize();
         //未设置默认每页10条
-        if (limit == null) limit = 10;
+        if (limit == null) {
+            limit = 10;
+        }
         Integer currentPage = baseListReqVO.getPageNum();
         //未设置默认从第一页查询
-        if (currentPage == null) currentPage = 1;
+        if (currentPage == null) {
+            currentPage = 1;
+        }
         Integer offset = (currentPage - 1) * limit;
         baseDetailExample.setLimit(limit);
         baseDetailExample.setOffset(offset);
@@ -196,10 +200,10 @@ public class BaseAreaServiceImpl implements BaseAreaService {
             logger.error("基地开放为空，修改失败");
             return Result.error("请确认基地开放时间是否满足条件");
         }
-        if (StringUtils.isEmpty(baseDetailReqDTO.getPublicTransportation())) {
-            logger.error("公共交通为空，修改失败");
-            return Result.error("请确认公共交通是否满足条件");
-        }
+//        if (StringUtils.isEmpty(baseDetailReqDTO.getPublicTransportation())) {
+//            logger.error("公共交通为空，修改失败");
+//            return Result.error("请确认公共交通是否满足条件");
+//        }
         String checkName = baseDetailRepository.checkBaseDetail2(baseDetailReqDTO.getBaseName(),baseDetailReqDTO.getId());
         if (!StringUtils.isEmpty(checkName)) {
             return Result.error("基地名称重，请更改");

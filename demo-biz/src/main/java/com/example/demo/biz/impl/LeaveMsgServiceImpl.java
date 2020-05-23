@@ -85,8 +85,12 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
     @Override
     public ResultMessage getMsg(PageParam<LeaveMsgPageVo> page) {
         PageModelReq pageModelReq = new PageModelReq();
-        if (page.getPageNum() <= 0) page.setPageNum(1);
-        if (page.getPageSize() <= 0) page.setPageSize(5);
+        if (page.getPageNum() <= 0) {
+            page.setPageNum(1);
+        }
+        if (page.getPageSize() <= 0) {
+            page.setPageSize(5);
+        }
         page.setPageNum((page.getPageNum() - 1) * page.getPageSize());
         //存放父级留言集合
         List<LeaveMsgResVO> parentMsg = leaveMsgRepository.getParentMsg(page);
@@ -126,8 +130,12 @@ public class LeaveMsgServiceImpl implements LeaveMsgService {
     @Override
     public ResultMessage getAdminMsg(PageParam<LeaveMsgPageVo> page) {
         PageModelReq pageModelReq = new PageModelReq();
-        if (page.getPageNum() <= 0) page.setPageNum(1);
-        if (page.getPageSize() <= 0) page.setPageSize(5);
+        if (page.getPageNum() <= 0) {
+            page.setPageNum(1);
+        }
+        if (page.getPageSize() <= 0) {
+            page.setPageSize(5);
+        }
         page.setPageNum((page.getPageNum() - 1) * page.getPageSize());
         //临时存放父级留言集合
         //查找所有第一层留言,parentId为null

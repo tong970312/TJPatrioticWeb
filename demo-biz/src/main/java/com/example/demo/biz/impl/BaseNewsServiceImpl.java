@@ -40,10 +40,14 @@ public class BaseNewsServiceImpl implements BaseNewsService {
         baseNewsExample.createCriteria().andDelFlagEqualTo(0);
         Integer limit = baseNewsReqDTO.getPageSize();
         //未设置默认每页10条
-        if (limit == null) limit = 10;
+        if (limit == null) {
+            limit = 10;
+        }
         Integer currentPage = baseNewsReqDTO.getPageNum();
         //未设置默认从第一页查询
-        if (currentPage == null) currentPage = 1;
+        if (currentPage == null) {
+            currentPage = 1;
+        }
         Integer offset = (currentPage - 1) * limit;
         baseNewsExample.setLimit(limit);
         baseNewsExample.setOffset(offset);
